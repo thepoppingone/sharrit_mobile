@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 
-import axios from 'axios';
+// import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
-import SmsListener from 'react-native-android-sms-listener';
+// import SmsListener from 'react-native-android-sms-listener';
 import Form from 'react-native-form';
 import CountryPicker from 'react-native-country-picker-modal';
 
@@ -25,10 +24,10 @@ const brandColor = '#744BAC';
 const styles = StyleSheet.create({
   countryPicker: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   container: {
-    flex: 1
+    flex: 1,
   },
   header: {
     textAlign: 'center',
@@ -38,14 +37,14 @@ const styles = StyleSheet.create({
     color: '#4A4A4A',
   },
   form: {
-    margin: 20
+    margin: 20,
   },
   textInput: {
     padding: 0,
     margin: 0,
     flex: 1,
     fontSize: 20,
-    color: brandColor
+    color: brandColor,
   },
   button: {
     marginTop: 20,
@@ -59,33 +58,32 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'Helvetica',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   wrongNumberText: {
     margin: 10,
     fontSize: 14,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   disclaimerText: {
     marginTop: 30,
     fontSize: 12,
-    color: 'grey'
+    color: 'grey',
   },
   callingCodeView: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   callingCodeText: {
     fontSize: 20,
     color: brandColor,
     fontFamily: 'Helvetica',
     fontWeight: 'bold',
-    paddingRight: 10
-  }
+    paddingRight: 10,
+  },
 });
 
 export default class PhoneVerifierScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -93,18 +91,15 @@ export default class PhoneVerifierScreen extends Component {
       spinner: false,
       country: {
         cca2: 'US',
-        callingCode: '1'
-      }
+        callingCode: '1',
+      },
     };
-
-
   }
 
-  _getCode = () => {
-
+  getCode = () => {
     // this.setState({ spinner: true });
 
-    console.log(this.refs.form.getValues());
+    console.log(this.form.getValues());
     console.log(this.state.country);
 
     // const developerEmailEncoded = encodeURIComponent('wangpp1@gmail.com')
@@ -129,30 +124,27 @@ export default class PhoneVerifierScreen extends Component {
 
 
     setTimeout(async () => {
-
       try {
-
-        const res = await api.post('/v1/verifications', {
-          body: {
-            ...this.refs.form.getValues(),
-            ...this.state.country
-          }
-        });
-
-        if (res.err) throw res.err;
-
-        this.setState({
-          spinner: false,
-          enterCode: true,
-          verification: res.body
-        });
-        this.refs.form.refs.textInput.setNativeProps({ text: '' });
-        this.refs.form.refs.textInput.focus();
-
-        setTimeout(() => {
-          Alert.alert('Sent!', "We've sent you a verification code");
-        }, 100);
-
+        // const res = await api.post('/v1/verifications', {
+        //   body: {
+        //     ...this.refs.form.getValues(),
+        //     ...this.state.country,
+        //   },
+        // });
+        //
+        // if (res.err) throw res.err;
+        //
+        // this.setState({
+        //   spinner: false,
+        //   enterCode: true,
+        //   verification: res.body,
+        // });
+        // this.refs.form.refs.textInput.setNativeProps({ text: '' });
+        // this.refs.form.refs.textInput.focus();
+        //
+        // setTimeout(() => {
+        //   Alert.alert('Sent!', "We've sent you a verification code");
+        // }, 100);
       } catch (err) {
         // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
         this.setState({ spinner: false });
@@ -160,35 +152,31 @@ export default class PhoneVerifierScreen extends Component {
           Alert.alert('Oops!', err.message);
         }, 100);
       }
-
     }, 100);
-
   }
 
-  _verifyCode = () => {
+  getSubmitAction = () => (this.state.enterCode ? this.verifyCode() : this.getCode())
 
+  verifyCode = () => {
     this.setState({ spinner: true });
 
     setTimeout(async () => {
-
       try {
-
-        const res = await api.put('/v1/verifications', {
-          body: {
-            ...this.refs.form.getValues(),
-            ...this.state.country
-          }
-        });
-
-        if (res.err) throw res.err;
-
-        this.refs.form.refs.textInput.blur();
-        // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
-        this.setState({ spinner: false });
-        setTimeout(() => {
-          Alert.alert('Success!', 'You have successfully verified your phone number');
-        }, 100);
-
+        // const res = await api.put('/v1/verifications', {
+        //   body: {
+        //     ...this.refs.form.getValues(),
+        //     ...this.state.country,
+        //   },
+        // });
+        //
+        // if (res.err) throw res.err;
+        //
+        // this.refs.form.refs.textInput.blur();
+        // // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
+        // this.setState({ spinner: false });
+        // setTimeout(() => {
+        //   Alert.alert('Success!', 'You have successfully verified your phone number');
+        // }, 100);
       } catch (err) {
         // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
         this.setState({ spinner: false });
@@ -196,90 +184,85 @@ export default class PhoneVerifierScreen extends Component {
           Alert.alert('Oops!', err.message);
         }, 100);
       }
-
     }, 100);
-
   }
 
-  _tryAgain = () => {
-    this.refs.form.refs.textInput.setNativeProps({ text: '' })
-    this.refs.form.refs.textInput.focus();
+  tryAgain = () => {
+    this.form.refs.textInput.setNativeProps({ text: '' });
+    this.form.refs.textInput.focus();
     this.setState({ enterCode: false });
   }
 
-  _getSubmitAction = () => {
-    this.state.enterCode ? this._verifyCode() : this._getCode();
-  }
-
-  _changeCountry = (country) => {
+  changeCountry = (country) => {
     this.setState({ country });
-    this.refs.form.refs.textInput.focus();
+    this.form.refs.textInput.focus();
   }
 
-  _renderFooter = () => {
-
-    if (this.state.enterCode)
+  renderFooter = () => {
+    if (this.state.enterCode) {
       return (
         <View>
-          <Text style={styles.wrongNumberText} onPress={this._tryAgain}>
+          <Text style={styles.wrongNumberText} onPress={this.tryAgain}>
             Enter the wrong number or need a new code?
           </Text>
         </View>
       );
+    }
 
     return (
       <View>
-        <Text style={styles.disclaimerText}>By tapping "Send confirmation code" above, we will send you an SMS to confirm your phone number. Message &amp; data rates may apply."</Text>
+        <Text style={styles.disclaimerText}>
+          By tapping Send confirmation code above,
+          we will send you an SMS to confirm your phone number.
+          Message &amp; data rates may apply.
+        </Text>
       </View>
     );
-
   }
 
-  _renderCountryPicker = () => {
-
-    if (this.state.enterCode)
+  renderCountryPicker = () => {
+    if (this.state.enterCode) {
       return (
         <View />
       );
+    }
 
     return (
       <CountryPicker
         ref={'countryPicker'}
         closeable
         style={styles.countryPicker}
-        onChange={this._changeCountry}
+        onChange={this.changeCountry}
         cca2={this.state.country.cca2}
         styles={countryPickerCustomStyles}
-        translation='eng'/>
+        translation="eng"
+      />
     );
-
   }
 
-  _renderCallingCode = () => {
-
-    if (this.state.enterCode)
+  renderCallingCode = () => {
+    if (this.state.enterCode) {
       return (
         <View />
       );
+    }
 
     return (
       <View style={styles.callingCodeView}>
         <Text style={styles.callingCodeText}>+{this.state.country.callingCode}</Text>
       </View>
     );
-
   }
 
   render() {
-
-    let headerText = `What's your ${this.state.enterCode ? 'verification code' : 'phone number'}?`
-    let buttonText = this.state.enterCode ? 'Verify confirmation code' : 'Send confirmation code';
-    let textStyle = this.state.enterCode ? {
+    const headerText = `What's your ${this.state.enterCode ? 'verification code' : 'phone number'}?`;
+    const buttonText = this.state.enterCode ? 'Verify confirmation code' : 'Send confirmation code';
+    const textStyle = this.state.enterCode ? {
       height: 50,
       textAlign: 'center',
       fontSize: 40,
       fontWeight: 'bold',
-      fontFamily: 'Courier'
+      fontFamily: 'Courier',
     } : {};
 
     return (
@@ -288,44 +271,46 @@ export default class PhoneVerifierScreen extends Component {
 
         <Text style={styles.header}>{headerText}</Text>
 
-        <Form ref={'form'} style={styles.form}>
+        <Form ref={(c) => { this.form = c; }} style={styles.form}>
 
           <View style={{ flexDirection: 'row' }}>
 
-            {this._renderCountryPicker()}
-            {this._renderCallingCode()}
+            {this.renderCountryPicker()}
+            {this.renderCallingCode()}
 
             <TextInput
-              ref={'textInput'}
-              name={this.state.enterCode ? 'code' : 'phoneNumber' }
+              ref={(c) => { this.form = c; }}
+              name={this.state.enterCode ? 'code' : 'phoneNumber'}
               type={'TextInput'}
               underlineColorAndroid={'transparent'}
               autoCapitalize={'none'}
               autoCorrect={false}
               placeholder={this.state.enterCode ? '_ _ _ _ _ _' : 'Phone Number'}
               keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
-              style={[ styles.textInput, textStyle ]}
-              returnKeyType='go'
+              style={[styles.textInput, textStyle]}
+              returnKeyType="go"
               autoFocus
               placeholderTextColor={brandColor}
               selectionColor={brandColor}
               maxLength={this.state.enterCode ? 6 : 20}
-              onSubmitEditing={this._getSubmitAction} />
+              onSubmitEditing={this.getSubmitAction}
+            />
 
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={this._getSubmitAction}>
+          <TouchableOpacity style={styles.button} onPress={this.getSubmitAction}>
             <Text style={styles.buttonText}>{ buttonText }</Text>
           </TouchableOpacity>
 
-          {this._renderFooter()}
+          {this.renderFooter()}
 
         </Form>
 
         <Spinner
           visible={this.state.spinner}
           textContent={'One moment...'}
-          textStyle={{ color: '#fff' }} />
+          textStyle={{ color: '#fff' }}
+        />
 
       </View>
 
