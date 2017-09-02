@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LoginScreen from './components/LoginScreen';
 // import {
 //   StyleSheet,
 //   Text,
@@ -20,7 +21,8 @@ export default class App extends Component {
 
   render() {
     return (
-      <PhoneVerifierScreen />
+      // <PhoneVerifierScreen />
+      <LoginScreen />
     );
   }
 }
