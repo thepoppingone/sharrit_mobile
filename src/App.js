@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import LoginScreen from './components/LoginScreen';
-// import {
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View,
-//   Platform,
-//   Alert,
-// } from 'react-native';
-import PhoneVerifierScreen from './components/PhoneVerifierScreen';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 
-export default class App extends Component {
+import ReduxThunk from 'redux-thunk';
+import reducers from './reducers';
+import Router from './Router';
+
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,10 +16,20 @@ export default class App extends Component {
     };
   }
 
+  componentWillMount() {
+    // const config = {};
+
+    // Set up configuration here
+  }
+
+
   render() {
     return (
-      // <PhoneVerifierScreen />
-      <LoginScreen />
+      <Provider store={store}>
+        <Router />
+      </Provider>
     );
   }
 }
+
+export default App;
